@@ -27,9 +27,40 @@ class TaskManager:
       print(task)
       
       
-# 動作確認用
+# 差し替え
 if __name__ == "__main__":
   tm = TaskManager()
-  tm.add_task("牛乳を買う")
-  tm.add_task("Pythonの勉強")
-  tm.list_tasks()
+
+  while True:
+      command =input("> ").strip()
+      
+      if command.startswith("add "):
+        title = command[4:]
+        tm.add_task(title)
+        
+      elif command == "list":
+        tm.list_tasks()
+        
+      elif command.startswith("done "):
+        try:
+          id = int(command[5:])
+          for task in tm.tasks:
+            if task.id == id:
+              task.mark_done()
+              break
+        except ValueError:
+          print("番号がただしくありません")
+          
+      elif command.startswith("delete "):
+        try:
+          id = int(command[7:])
+          tm.tasks = [task for task in tm.tasks if task.id != id]
+        except ValueError:
+          print("番号がただしくありません")
+          
+      elif command == "exit":
+        print("終了します。")
+        break
+      
+      else:
+        print("不正なコマンドです。")
